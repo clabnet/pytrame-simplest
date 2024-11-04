@@ -1,6 +1,6 @@
 r"""
 Installation requirements:
-    pip install trame vtk trame-vuetify trame-vtk trame-components trame-plotly requests plotly Flask
+    pip install trame vtk trame-vuetify trame-vtk trame-components requests
 """
 
 import os
@@ -16,6 +16,8 @@ from vtkmodules.vtkRenderingAnnotation import vtkCubeAxesActor
 
 # from vtk.util.misc import vtkGetDataRoot
 # VTK_DATA_ROOT = vtkGetDataRoot()
+
+CURRENT_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
 
 from vtkmodules.vtkRenderingCore import (
     vtkActor,
@@ -101,7 +103,9 @@ if 1 == 1:
     # print(VTK_DATA_ROOT)
 
     reader = vtkIOXML.vtkXMLUnstructuredGridReader()
-    reader.SetFileName("D:\\_POMINI\\src\\backend\\pytrame-simplest\\data\\file2.vtu")
+
+    print(CURRENT_DIRECTORY)
+    reader.SetFileName(os.path.join(CURRENT_DIRECTORY, "data", "file2.vtu"))
     reader.Update()
     dataset = reader.GetOutput()
 

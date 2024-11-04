@@ -22,7 +22,7 @@ uv venv venv
 uv pip install -e .
 ```
 
-##### Run the app
+##### Run app
 
 ```
 cd .\viewervtu\app
@@ -30,13 +30,13 @@ cd .\viewervtu\app
 python viewervtu.py --port 5015
 ```
 
-# Build the Docker image
+# Build Docker image
 
 ```bash
 docker build -t pytrame .
 ```
 
-# Build the Docker image with no cache
+# Build Docker image with no cache
 
 ```
 docker build --progress=plain --no-cache -f ./Dockerfile -t pytrame .
