@@ -4,46 +4,45 @@ trame - a web framework that weaves together open source components into customi
 
 Please use the links below to find more informations:
 
--   [Tutorial](https://kitware.github.io/trame/guide/tutorial/)
--   [trame website](https://kitware.github.io/trame/)
+- [Tutorial](https://kitware.github.io/trame/guide/tutorial/)
+- [trame website](https://kitware.github.io/trame/)
 
-# Steps to run the tutorial
+### Steps
 
--   fare partire la modalita .venv con il comando:
-
-```
-python3.9 -m venv .venv
-python -m pip install --upgrade pip
-.\.venv\Scripts\activate
-```
-
--   installare i pacchetti necessari con il comando:
+##### Create a virtual environment and activate it
 
 ```
-pip install trame vtk trame-vuetify trame-vtk trame-components trame-plotly requests plotly Flask
+uv venv venv
+.\venv\Scripts\activate
 ```
 
--   Nel primo prompt fare partire api.py con il comando:
+##### Add requirements
 
 ```
-cd .\app
-python api.py
+uv pip install -e .
 ```
 
--   Nel secondo prompt fare partire viewervtu.py il comando:
+##### Run the app
 
 ```
-cd .\app
+cd .\viewervtu\app
+
 python viewervtu.py --port 5015
 ```
 
-# Build the image
+# Build the Docker image
 
 ```bash
 docker build -t pytrame .
 ```
 
-# Run the image on port 8080
+# Build the Docker image with no cache
+
+```
+docker build --progress=plain --no-cache -f ./Dockerfile -t pytrame .
+```
+
+# Run the Docker image on port 8080
 
 ```bash
 docker run -it --rm -p 8080:80 pytrame
