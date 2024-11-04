@@ -1,0 +1,8 @@
+trame
+trame-components
+trame-server
+trame-vuetify
+trame-vtk
+vtk
+wslink
+numpy
