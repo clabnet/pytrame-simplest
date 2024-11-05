@@ -1,4 +1,4 @@
-# Tutorial material for trame v2
+# Tutorial trame v2
 
 trame - a web framework that weaves together open source components into customized visual analytics easily.
 
@@ -51,7 +51,7 @@ docker build --progress=plain --no-cache -f ./Dockerfile -t pytrame .
 #### Run the Docker image on port 8082
 
 ```bash
-docker run -it --rm -p 8082:80 pytrame
+docker run -it --rm --env DATA_URL=http://192.168.1.202:5102/static/file2.vtu -p 8082:80 pytrame
 ```
 
 ```
