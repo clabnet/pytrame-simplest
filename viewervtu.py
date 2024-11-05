@@ -67,14 +67,20 @@ class LookupTable:
 # Trame setup
 # -----------------------------------------------------------------------------
 
-# Argument parsing setup
-parser = argparse.ArgumentParser(description="Trame Application")
-# parser.add_argument("--port", type=int, help="Port number for the Trame server", default=8082),
-parser.add_argument("-d", "--data_url", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file1.vtu")
+# Getting parameter from env variable
+data_url = os.getenv("DATA_URL")
 
-args = parser.parse_args()
-
-data_url = args.data_url
+if (data_url == None):
+  # Argument parsing setup
+  parser = argparse.ArgumentParser(description="Trame Application")
+  # parser.add_argument("--port", type=int, help="Port number for the Trame server", default=8082),
+  parser.add_argument("-d", "--data_url", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file2.vtu")
+  args = parser.parse_args()
+  if (args.data_url != ""):
+    data_url = args.data_url
+  else:
+    print("No data url provided. Please provide a url to a .vtu file.")
+    exit()
 
 server = get_server(client_type="vue2")
 state, ctrl = server.state, server.controller
@@ -92,10 +98,6 @@ renderWindow.AddRenderer(renderer)
 renderWindowInteractor = vtkRenderWindowInteractor()
 renderWindowInteractor.SetRenderWindow(renderWindow)
 renderWindowInteractor.GetInteractorStyle().SetCurrentStyleToTrackballCamera()
-
-# get the file from the URL
-# url = "http://192.168.1.202:5102/static/file1.vtu"
-# response = requests.get(url)
 
 logger.info("Data URL: {}", data_url)
 response = requests.get(data_url)

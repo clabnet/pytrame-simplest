@@ -3,7 +3,7 @@ trame:
     - python
     - /deploy/viewervtu.py
     - --data_url
-    - ${DATA_URL}
+    - ${dataUrl}
 
     # - --port
     # - ${port}
