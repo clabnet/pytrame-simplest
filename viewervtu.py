@@ -1,9 +1,11 @@
-r"""
+"""
 Installation requirements:
     pip install trame vtk trame-vuetify trame-vtk trame-components requests
 """
 
 import os
+
+from loguru import logger
 
 from trame.app import get_server
 from trame.ui.vuetify import SinglePageWithDrawerLayout
@@ -13,9 +15,6 @@ from trame_vtk.modules.vtk.serializers import configure_serializer
 from vtkmodules.vtkCommonDataModel import vtkDataObject
 from vtkmodules.vtkFiltersCore import vtkContourFilter
 from vtkmodules.vtkRenderingAnnotation import vtkCubeAxesActor
-
-# from vtk.util.misc import vtkGetDataRoot
-# VTK_DATA_ROOT = vtkGetDataRoot()
 
 CURRENT_DIRECTORY = os.path.abspath(os.path.dirname(__file__))
 
@@ -64,6 +63,23 @@ class LookupTable:
     Greyscale = 2
     Inverted_Greyscale = 3
 
+# -----------------------------------------------------------------------------
+# Trame setup
+# -----------------------------------------------------------------------------
+
+# Argument parsing setup
+parser = argparse.ArgumentParser(description="Trame Application")
+# parser.add_argument("--port", type=int, help="Port number for the Trame server", default=8082),
+parser.add_argument("-d", "--dataurl", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file1.vtu")
+
+args = parser.parse_args()
+
+data_url = args.dataurl
+
+server = get_server(client_type="vue2")
+state, ctrl = server.state, server.controller
+
+state.setdefault("active_ui", None)
 
 # -----------------------------------------------------------------------------
 # VTK pipeline
@@ -77,37 +93,24 @@ renderWindowInteractor = vtkRenderWindowInteractor()
 renderWindowInteractor.SetRenderWindow(renderWindow)
 renderWindowInteractor.GetInteractorStyle().SetCurrentStyleToTrackballCamera()
 
-
-# URL dell'API
-# url = "http://localhost:5005/get-file/disk_out_ref.vtu"
-# url = "http://localhost:5102/static/file2.vtu"
-# url = "http://192.168.1.202:5102/static/file2.vtu"
-# url = "https://people.math.sc.edu/Burkardt/data/vtu/triangle_mesh_linear.vtu"
-
 # get the file from the URL
+# url = "http://192.168.1.202:5102/static/file1.vtu"
 # response = requests.get(url)
 
-# if response.status_code == 200:
-if 1 == 1:
-    # Crea un file temporaneo per salvare i dati
-    # with tempfile.NamedTemporaryFile(delete=False, suffix=".vtu") as tmp_file:
-    #    tmp_file.write(response.content)
-    #    tmp_file_path = tmp_file.name
-    #    # Usa il lettore VTK per leggere il file temporaneo
-    #    reader = vtkIOXML.vtkXMLUnstructuredGridReader()
-    #    reader.SetFileName(tmp_file_path)
-    #    reader.Update()
-    #    dataset = reader.GetOutput()
+logger.info("Data URL: {}", data_url)
+response = requests.get(data_url)
 
-    # VTK_DATA_ROOT = vtkGetDataRoot()
-    # print(VTK_DATA_ROOT)
+if response.status_code == 200:
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".vtu") as tmp_file:
+        tmp_file.write(response.content)
+        tmp_file_path = tmp_file.name
+        reader = vtkIOXML.vtkXMLUnstructuredGridReader()
+        reader.SetFileName(tmp_file_path)
+        reader.Update()
+        dataset = reader.GetOutput()
 
-    reader = vtkIOXML.vtkXMLUnstructuredGridReader()
-
-    print(CURRENT_DIRECTORY)
-    reader.SetFileName(os.path.join(CURRENT_DIRECTORY, "data", "file2.vtu"))
-    reader.Update()
-    dataset = reader.GetOutput()
+    # print(CURRENT_DIRECTORY)
+    # reader.SetFileName(os.path.join(CURRENT_DIRECTORY, "data", "file2.vtu"))
 
     # Extract information
     dataset_arrays = []
@@ -217,21 +220,6 @@ cube_axes.SetFlyModeToOuterEdges()
 
 renderer.ResetCamera()
 
-# -----------------------------------------------------------------------------
-# Trame setup
-# -----------------------------------------------------------------------------
-
-# Argument parsing setup
-parser = argparse.ArgumentParser(description="Trame Application")
-parser.add_argument(
-    "--port", type=int, help="Port number for the Trame server", default=8082
-)
-args = parser.parse_args()
-
-server = get_server(client_type="vue2")
-state, ctrl = server.state, server.controller
-
-state.setdefault("active_ui", None)
 
 # -----------------------------------------------------------------------------
 # Callbacks
