@@ -1,6 +1,15 @@
 services:
-    trame:
-        container_name: pytrame
-        image: pytrame
-        ports:
-            - 8082:80
+  trame:
+    image: pytrame
+    container_name: pytrame
+    restart: unless-stopped
+    env_file:
+      - .env
+
+    ports:
+      - 8082:80
+
+networks:
+  default:
+    name: horizon_network
+    external: true

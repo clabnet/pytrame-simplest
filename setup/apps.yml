@@ -2,8 +2,8 @@ trame:
   cmd:
     - python
     - /deploy/viewervtu.py
-    - --dataurl
-    - ${dataurl}
+    - --data_url
+    - ${DATA_URL}
 
     # - --port
     # - ${port}

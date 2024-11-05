@@ -70,11 +70,11 @@ class LookupTable:
 # Argument parsing setup
 parser = argparse.ArgumentParser(description="Trame Application")
 # parser.add_argument("--port", type=int, help="Port number for the Trame server", default=8082),
-parser.add_argument("-d", "--dataurl", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file1.vtu")
+parser.add_argument("-d", "--data_url", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file1.vtu")
 
 args = parser.parse_args()
 
-data_url = args.dataurl
+data_url = args.data_url
 
 server = get_server(client_type="vue2")
 state, ctrl = server.state, server.controller

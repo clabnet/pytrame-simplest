@@ -9,49 +9,65 @@ Please use the links below to find more informations:
 
 ### Steps
 
-##### Create a virtual environment and activate it
+#### Create a virtual environment and activate it
 
 ```
 uv venv venv
 .\venv\Scripts\activate
 ```
 
-##### Add requirements
+#### Add requirements
 
 ```
 uv pip install -e .
 ```
 
-##### Run app
+#### Run app
+
+Open default file
 
 ```
-cd .\viewervtu\app
-
-python viewervtu.py --port 5015
+python viewervtu.py
 ```
 
-# Build Docker image
+Open specific file
+
+```
+python viewervtu.py -d "http://localhost:5102/static/file2.vtu"
+```
+
+#### Build Docker image
 
 ```bash
 docker build -t pytrame .
 ```
 
-# Build Docker image with no cache
+#### Build Docker image with no cache
 
 ```
 docker build --progress=plain --no-cache -f ./Dockerfile -t pytrame .
 ```
 
-# Run the Docker image on port 8080
+#### Run the Docker image on port 8082
 
 ```bash
-docker run -it --rm -p 8080:80 pytrame
+docker run -it --rm -p 8082:80 pytrame
+```
+
+```
+docker run -it --rm -p 8082:80 -e DATA_URL=http://192.168.1.202:5102/static/file2.vtu
 ```
 
 Or if you need some prefix
 
 ```bash
-docker run -it --rm -p 8080:80 -e TRAME_URL_PREFIX=/my-app/sub/path pytrame
+docker run -it --rm -p 8082:80 -e TRAME_URL_PREFIX=/my-app/sub/path pytrame
+```
+
+#### Start docker container
+
+```bash
+docker compose up -d
 ```
 
 SERVER EXAMPLE
