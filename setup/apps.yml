@@ -2,13 +2,12 @@ trame:
   cmd:
     - python
     - /deploy/viewervtu.py
-    - --data_url
-    - ${dataUrl}
-
-    # - --port
-    # - ${port}
-    # - --host
-    # - ${host}
-    # - --authKey
-    # - ${secret}
-    # - --server
+    - --host
+    - ${host}
+    - --port
+    - ${port}
+    - --authKey
+    - ${secret}
+    - --data
+    - ${data}
+    #- --server

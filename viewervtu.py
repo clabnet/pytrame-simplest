@@ -63,24 +63,49 @@ class LookupTable:
     Greyscale = 2
     Inverted_Greyscale = 3
 
+
 # -----------------------------------------------------------------------------
 # Trame setup
 # -----------------------------------------------------------------------------
 
-# Getting parameter from env variable
-data_url = os.getenv("DATA_URL")
+# Argument parsing setup
+parser = argparse.ArgumentParser(description="Trame Application")
 
-if (data_url == None):
-  # Argument parsing setup
-  parser = argparse.ArgumentParser(description="Trame Application")
-  # parser.add_argument("--port", type=int, help="Port number for the Trame server", default=8082),
-  parser.add_argument("-d", "--data_url", type=str, help="Url for fetching data in .vtu format.", default="http://localhost:5102/static/file2.vtu")
-  args = parser.parse_args()
-  if (args.data_url != ""):
-    data_url = args.data_url
-  else:
-    print("No data url provided. Please provide a url to a .vtu file.")
-    exit()
+
+parser.add_argument(
+    "--host", type=str, help="Host ip address server", default="0.0.0.0"
+)
+
+parser.add_argument(
+    "-p", "--port", type=int, help="Port number for the Trame server", default=8080
+)
+
+parser.add_argument("--authKey", type=str, help="Auth key Trame server", default="")
+
+parser.add_argument(
+    "-d",
+    "--data",
+    type=str,
+    help="Url for fetching data in .vtu format.",
+    default="http://localhost:5102/static/file2.vtu",
+)
+
+# parser.add_argument("--server", type=str, help="Open browser at startup", default="")
+
+# Getting parameters from command line arguments
+args = parser.parse_args()
+port = args.port
+data_url = args.data
+host = args.host
+
+if data_url != None:
+    logger.info("Data URL argument: {}", data_url)
+
+# Override data parameter from env variable (if present)
+data_url_env = os.getenv("DATA_URL")
+if data_url_env != None:
+    logger.info("Using envvar DATA_URL to override data URL argument: {}", data_url_env)
+    data_url = data_url_env
 
 server = get_server(client_type="vue2")
 state, ctrl = server.state, server.controller
@@ -99,7 +124,6 @@ renderWindowInteractor = vtkRenderWindowInteractor()
 renderWindowInteractor.SetRenderWindow(renderWindow)
 renderWindowInteractor.GetInteractorStyle().SetCurrentStyleToTrackballCamera()
 
-logger.info("Data URL: {}", data_url)
 response = requests.get(data_url)
 
 if response.status_code == 200:
@@ -110,10 +134,6 @@ if response.status_code == 200:
         reader.SetFileName(tmp_file_path)
         reader.Update()
         dataset = reader.GetOutput()
-
-    # print(CURRENT_DIRECTORY)
-    # reader.SetFileName(os.path.join(CURRENT_DIRECTORY, "data", "file2.vtu"))
-
     # Extract information
     dataset_arrays = []
     fields = [
@@ -139,7 +159,6 @@ if response.status_code == 200:
     default_min, default_max = (
         dataset.GetPointData().GetArray(default_array.get("text")).GetRange()
     )
-
 
 # Mesh
 mesh_mapper = vtkDataSetMapper()
