@@ -68,47 +68,82 @@ class LookupTable:
 # Trame setup
 # -----------------------------------------------------------------------------
 
-# Argument parsing setup
-parser = argparse.ArgumentParser(description="Trame Application")
+# # Argument parsing setup
+# parser = argparse.ArgumentParser(description="Trame Application")
 
 
-parser.add_argument(
-    "--host", type=str, help="Host ip address server", default="0.0.0.0"
-)
+# parser.add_argument(
+#     "--host", type=str, help="Host ip address server", default="0.0.0.0"
+# )
 
-parser.add_argument(
-    "-p", "--port", type=int, help="Port number for the Trame server", default=8080
-)
+# parser.add_argument(
+#     "-p", "--port", type=int, help="Port number for the Trame server", default=8080
+# )
 
-parser.add_argument("--authKey", type=str, help="Auth key Trame server", default="")
+# parser.add_argument("--authKey", type=str, help="Auth key Trame server", default="")
 
-parser.add_argument(
-    "-d",
-    "--data",
-    type=str,
-    help="Url for fetching data in .vtu format.",
-    default="http://localhost:5102/static/file2.vtu",
-)
+# parser.add_argument(
+#     "-d",
+#     "--data",
+#     type=str,
+#     help="Url for fetching data in .vtu format.",
+#     default="http://localhost:5102/static/file2.vtu",
+# )
 
-# parser.add_argument("--server", type=str, help="Open browser at startup", default="")
+# # parser.add_argument("--server", type=str, help="Open browser at startup", default="")
 
-# Getting parameters from command line arguments
-args = parser.parse_args()
-port = args.port
-data_url = args.data
-host = args.host
+# # Getting parameters from command line arguments
+# args = parser.parse_args()
 
-if data_url != None:
-    logger.info("Data URL argument: {}", data_url)
+# port = args.port
+# data_url = args.data
+# host = args.host
 
-# Override data parameter from env variable (if present)
-data_url_env = os.getenv("DATA_URL")
-if data_url_env != None:
-    logger.info("Using envvar DATA_URL to override data URL argument: {}", data_url_env)
-    data_url = data_url_env
+# if data_url != None:
+#     logger.info("Data URL argument: {}", data_url)
+
+## Override data parameter from env variable (if present)
+# data_url_env = os.getenv("DATA_URL")
+# if data_url_env != None:
+#     logger.info("Using envvar DATA_URL to override data URL argument: {}", data_url_env)
+#     data_url = data_url_env
+
 
 server = get_server(client_type="vue2")
 state, ctrl = server.state, server.controller
+
+server.cli.add_argument(
+    "-d",
+    "--data",
+    help="Url for fetching data in .vtu format.",
+    dest="data",
+    type=str,
+    default="http://localhost:5102/static/file2.vtu",
+)
+# server.cli.add_argument(
+#     "-p",
+#     "--port",
+#     help="Port number for the Trame server",
+#     dest="port",
+#     type=int,
+#     default=8080,
+# )
+# server.cli.add_argument(
+#     "-h",
+#     "--host",
+#     help="Host ip address server",
+#     dest="host",
+#     type=str,
+#     default="0.0.0.0",
+# )
+
+args = server.cli.parse_args()
+data_url = args.data
+if data_url != None:
+    logger.info("Data URL argument: {}", data_url)
+
+# port = args.port
+# host = args.host
 
 state.setdefault("active_ui", None)
 
