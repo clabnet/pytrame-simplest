@@ -118,7 +118,7 @@ server.cli.add_argument(
     help="Url for fetching data in .vtu format.",
     dest="data",
     type=str,
-    default="http://localhost:5102/static/file2.vtu",
+    default="http://192.168.1.202:5102/static/file2.vtu",
 )
 # server.cli.add_argument(
 #     "-p",

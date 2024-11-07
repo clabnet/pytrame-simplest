@@ -51,11 +51,13 @@ docker build --progress=plain --no-cache -f ./Dockerfile -t pytrame .
 #### Run the Docker image on port 8080
 
 ```bash
-docker run -it --rm --env DATA_URL=http://192.168.1.202:5102/static/file2.vtu -p 8080:80 pytrame
+docker run -it --rm -p 8080:80 pytrame
+
+http://localhost:8080/?data=http%3A%2F%2F192.168.1.202%3A5102%2Fstatic%2Ffile1.vtu
 ```
 
 ```
-docker run -it --rm -p 8080:80 -e DATA_URL=http://192.168.1.202:5102/static/file2.vtu
+docker run -it --rm -p 8080:80
 ```
 
 Or if you need some prefix

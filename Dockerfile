@@ -10,6 +10,5 @@ RUN apt-get update && \
 COPY --chown=trame-user:trame-user . /deploy
 
 ENV TRAME_CLIENT_TYPE=vue2
-ENV DATA_URL=http://192.168.1.202:5102/static/file2.vtu
 
 RUN /opt/trame/entrypoint.sh build

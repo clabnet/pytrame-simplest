@@ -3,9 +3,8 @@ services:
     image: pytrame
     container_name: pytrame
     restart: unless-stopped
-    env_file:
-      - .env
-
+    # env_file:
+    #   - .env
     ports:
       - 8080:80
 
